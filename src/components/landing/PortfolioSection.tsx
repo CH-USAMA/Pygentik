@@ -3,79 +3,18 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
+import Image from "next/image";
 
-const projects = [
-  {
-    title: "Meridian CRM",
-    category: "Web Application",
-    description:
-      "Enterprise client relationship management platform with real-time analytics, automated lead scoring, and multi-team collaboration dashboards.",
-    tags: ["React", "Node.js", "PostgreSQL", "AWS"],
-    gradient: "from-[#00F0FF]/20 to-[#D4942A]/10",
-    borderAccent: "#00F0FF",
-    link: "#",
-  },
-  {
-    title: "NexaHealth",
-    category: "Mobile App",
-    description:
-      "Telehealth and patient management mobile app supporting video consultations, prescription tracking, and health analytics for 50K+ active users.",
-    tags: ["React Native", "Firebase", "TypeScript", "Stripe"],
-    gradient: "from-[#B829FF]/20 to-[#5A7258]/10",
-    borderAccent: "#B829FF",
-    link: "#",
-  },
-  {
-    title: "AutoFlow",
-    category: "AI / Automation",
-    description:
-      "AI-powered workflow automation engine that reduces manual data processing by 85% through intelligent document parsing and task routing.",
-    tags: ["Python", "TensorFlow", "FastAPI", "Redis"],
-    gradient: "from-[#FF2A6D]/20 to-[#4A6FA0]/10",
-    borderAccent: "#FF2A6D",
-    link: "#",
-  },
-  {
-    title: "TerraScope",
-    category: "Data Analytics",
-    description:
-      "Real estate analytics and valuation dashboard aggregating market data, ML-driven price predictions, and interactive geospatial visualizations.",
-    tags: ["Next.js", "D3.js", "Python", "ML"],
-    gradient: "from-[#05D9E8]/20 to-[#A06B50]/10",
-    borderAccent: "#05D9E8",
-    link: "#",
-  },
-  {
-    title: "Pulse Connect",
-    category: "Full Stack",
-    description:
-      "Enterprise team collaboration platform with real-time messaging, project boards, file sharing, and integrations with 20+ workplace tools.",
-    tags: ["Vue.js", "GraphQL", "Docker", "K8s"],
-    gradient: "from-[#D1F628]/20 to-[#9A5CB0]/10",
-    borderAccent: "#D1F628",
-    link: "#",
-  },
-  {
-    title: "QuantEdge",
-    category: "FinTech",
-    description:
-      "Financial data processing and reporting system handling $2M+ daily transactions with real-time fraud detection and compliance automation.",
-    tags: ["Python", "Pandas", "React", "PostgreSQL"],
-    gradient: "from-[#01FFA4]/20 to-[#A08B4E]/10",
-    borderAccent: "#01FFA4",
-    link: "#",
-  },
-];
+import { projects } from "@/data/projects";
 
 const categories = ["All", ...Array.from(new Set(projects.map((p) => p.category)))];
 
 const PortfolioSection = () => {
   const [activeFilter, setActiveFilter] = useState("All");
 
-  const filtered =
-    activeFilter === "All"
-      ? projects
-      : projects.filter((p) => p.category === activeFilter);
+  const filtered = activeFilter === "All"
+      ? projects.slice(0, 6)
+      : projects.filter((p) => p.category === activeFilter).slice(0, 6);
 
   return (
     <section id="portfolio" className="py-28 px-6 relative overflow-hidden">
@@ -151,8 +90,8 @@ const PortfolioSection = () => {
           <AnimatePresence mode="popLayout">
             {filtered.map((project) => (
               <motion.a
-                key={project.title}
-                href={project.link}
+                key={project.slug}
+                href={`/case-studies/${project.slug}`}
                 layout
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -163,10 +102,23 @@ const PortfolioSection = () => {
               >
                 {/* Visual Header */}
                 <div
-                  className={`relative h-44 bg-gradient-to-br ${project.gradient} flex items-center justify-center overflow-hidden`}
+                  className={`relative h-44 bg-[#050505] flex items-center justify-center overflow-hidden`}
                 >
+                  {/* Base Unsplash Image */}
+                  <Image 
+                    src={project.image} 
+                    alt={project.title} 
+                    fill 
+                    className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+
+                  {/* Gradient & Dark Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-50 mix-blend-color`} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-90" />
+
                   {/* Geometric pattern */}
-                  <div className="absolute inset-0 opacity-[0.06]">
+                  <div className="absolute inset-0 opacity-[0.1]">
                     <div
                       className="w-full h-full"
                       style={{
@@ -183,26 +135,12 @@ const PortfolioSection = () => {
                     />
                   </div>
 
-                  {/* Project initial */}
-                  <div
-                    className="text-6xl font-extrabold font-[family-name:var(--font-space-grotesk)] opacity-20 select-none"
-                    style={{ color: project.borderAccent }}
-                  >
-                    {project.title.charAt(0)}
-                  </div>
-
-                  {/* External link icon */}
-                  <div className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-[#050505]/50 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <ArrowUpRight
-                      className="w-4 h-4"
-                      style={{ color: project.borderAccent }}
-                    />
-                  </div>
-
-                  {/* Category badge */}
-                  <div className="absolute bottom-4 left-4 px-3 py-1 rounded-md bg-[#050505]/60 backdrop-blur text-xs font-medium text-[#F8F8FF]/70">
+                  {/* Top-Right Category Badge */}
+                  <div className="absolute top-4 right-4 px-3 py-1 rounded-md bg-[#050505]/60 backdrop-blur text-[10px] font-bold text-[#F8F8FF] uppercase tracking-widest border border-[#F8F8FF]/[0.08]">
                     {project.category}
                   </div>
+
+                  {/* Removed absolute position overrides to clean up UI */}
                 </div>
 
                 {/* Content */}
@@ -230,6 +168,20 @@ const PortfolioSection = () => {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* View All Projects Button */}
+        <div className="mt-16 flex justify-center">
+          <a
+            href="/projects"
+            className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#F8F8FF]/[0.03] border border-[#F8F8FF]/[0.08] hover:border-[#00F0FF]/40 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,240,255,0.15)]"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-[#00F0FF]/10 to-[#B829FF]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="relative font-bold text-[#E2E8F0] group-hover:text-[#F8F8FF] tracking-wide">
+              View All Projects
+            </span>
+            <ArrowUpRight className="relative w-5 h-5 text-[#00F0FF] group-hover:rotate-45 transition-transform duration-300" />
+          </a>
+        </div>
       </div>
     </section>
   );

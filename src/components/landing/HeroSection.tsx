@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowDown } from "lucide-react";
+import Link from "next/link";
 
 const HeroSection = () => {
   return (
@@ -98,18 +99,13 @@ const HeroSection = () => {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 pt-2"
             >
-              <motion.a
-                href="#contact"
-                whileHover={{
-                  scale: 1.03,
-                  boxShadow: "0 0 32px rgba(232,168,56,0.2)",
-                }}
-                whileTap={{ scale: 0.97 }}
-                className="px-8 py-4 rounded-lg bg-[#00F0FF] text-[#050505] font-bold flex items-center justify-center gap-2 tracking-tight text-base"
+              <Link
+                href="/discovery"
+                className="w-full sm:w-auto group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#F8F8FF] text-[#050505] rounded-xl overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(248,248,255,0.3)]"
               >
                 Let&apos;s Build Together{" "}
                 <ArrowRight className="w-5 h-5" />
-              </motion.a>
+              </Link>
               <motion.a
                 href="#portfolio"
                 whileHover={{

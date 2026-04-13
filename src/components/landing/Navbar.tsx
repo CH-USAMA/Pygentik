@@ -71,7 +71,7 @@ const Navbar = () => {
             </motion.div>
           ))}
           <motion.a
-            href="#contact"
+            href="/discovery"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 }}
@@ -118,13 +118,13 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <a
-                href="#contact"
+              <Link
+                href="/discovery"
                 className="w-full py-4 mt-4 rounded-xl bg-[#00F0FF] text-[#050505] font-bold text-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Start a Project
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}
